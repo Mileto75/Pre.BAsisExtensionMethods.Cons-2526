@@ -1,6 +1,8 @@
 ﻿using Pre.BasisExtensionMethods.Cons;
 using Pre.BasisExtensionMethods.Cons.Extensions;
+using Pre.BasisExtensionMethods.Cons.Mappers;
 using Pre.BasisExtensionMethods.Core.Entities;
+using System.Collections.ObjectModel;
 using System.Threading.Channels;
 
 namespace Pre.BAsisExtensionMethods.Cons
@@ -25,52 +27,76 @@ namespace Pre.BAsisExtensionMethods.Cons
 
             //int isEven checker
             //number on position x
-            if (numbers.ToArray()[1] %2 == 0)
+            if (numbers.ToArray()[1].IsEven())
                 Console.WriteLine("Even");
             else
                 Console.WriteLine("OnEven");
 
             //Ienumerable int kleinste getal
-            var minimum = numbers.ToArray()[0];
-            foreach(var number in numbers)
-            {
-                if (minimum > number)
-                    minimum = number;
-            }
-            Console.WriteLine($"Smallest number = {minimum}");
+            //var minimum = numbers.ToArray()[0];
+            //foreach(var number in numbers)
+            //{
+            //    if (minimum > number)
+            //        minimum = number;
+            //}
+            Console.WriteLine($"Smallest number = {numbers.Minimum()}");
             //ienumerable string random waarde uit lijst retourneren
-            var random = new Random();
-            var randomIndex = random.Next(0, wordsArray.Count() - 1);
-            var randomWord = wordsArray.ToArray()[randomIndex];
-            Console.WriteLine($"Random word = {randomWord}");
+            //var random = new Random();
+            //var randomIndex = random.Next(0, wordsArray.Count() - 1);
+            //var randomWord = wordsArray.ToArray()[randomIndex];
+            Console.WriteLine($"Random word = {words.Split(" ").GetRandom()}");
             //return all even numbers
-            List<int> evenNumbers = new();
-            foreach(var number in numbers)
-            {
-                if (number % 2 == 0)
-                    evenNumbers.Add(number);
-            }
-            Console.WriteLine($"Even numbers = {string.Join(" ",evenNumbers)}");
-            //mapping from entity to movie
+            //List<int> evenNumbers = new();
+            //foreach(var number in numbers)
+            //{
+            //    if (number % 2 == 0)
+            //        evenNumbers.Add(number);
+            //}
+            Console.WriteLine($"Even numbers = {string.Join(" ", numbers.GetEvenNumbers())}");
+            //mapping from entity to moviesIndexViewModel
             var movie = new Movie
             {
                 Title = "Deadpool vs Wolverine",
                 GenreId = 1,
                 Genre = "Action Marvel",
-                Actors = new List<string> { "Ryan Renolds","Hugh Jackman" },
-                YearPublished = new DateTime(2022,12,25),
+                Actors = new List<string> { "Ryan Renolds", "Hugh Jackman" },
+                YearPublished = new DateTime(2022, 12, 25),
                 Id = 1
             };
-            var moviesIndexViewModel = new MoviesIndexViewModel
-            {
-                Title = movie.Title,
-                Genre = movie.Genre,
-                Actors = movie.Actors
-            };
+            //var moviesIndexViewModel = new MoviesIndexViewModel
+            //{
+            //    Title = movie.Title,
+            //    Genre = movie.Genre,
+            //    Actors = movie.Actors
+            //};
+            var moviesIndexViewModel = movie.MapToViewModel();
             Console.WriteLine($"MoviesIndexVieModel:{moviesIndexViewModel.Title}, " +
                 $"{moviesIndexViewModel.Genre}, {moviesIndexViewModel.Actors}");
-            
+            var movies = new Collection<Movie>
+            {
+                movie,
+                new Movie
+                {
+                    Title = "Deadpool",
+                    GenreId = 1,
+                    Genre = "Action Marvel",
+                    Actors = new List<string> { "Ryan Renolds","Hugh Jackman" },
+                    YearPublished = new DateTime(2022,12,25),
+                    Id = 2
+                },
+                new Movie
+                {
+                    Title = "The suicide squad",
+                    GenreId = 1,
+                    Genre = "Action Marvel",
+                    Actors = new List<string> { "Ryan Renolds","Hugh Jackman" },
+                    YearPublished = new DateTime(2022,12,25),
+                    Id = 3
+                },
+            };
+           var moviesIndexViewModels = movies.MapToViewModels();
             //Extra:generic ienumerable random waarde retourneren uit lijst
+            Console.WriteLine($"Random movie={moviesIndexViewModels.GetRandom().Title}");
         }
     }
 }

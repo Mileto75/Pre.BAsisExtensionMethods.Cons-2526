@@ -29,5 +29,13 @@ namespace Pre.BasisExtensionMethods.Cons.Extensions
             }
             return numberOfLetters;
         }
+        public static string GetRandom(this IEnumerable<string> input)
+        {
+            if (input.Count() == 0)
+                return "<NoRandom>";
+            var random = new Random();
+            var randomIndex = random.Next(0, input.Count() - 1);
+            return input.ToArray()[randomIndex];
+        }
     }
 }
